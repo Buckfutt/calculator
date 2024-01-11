@@ -46,7 +46,7 @@ end);
 ashita.events.register('d3d_present', 'present_cb', function ()
     imgui.SetNextWindowBgAlpha(0.8);
     imgui.SetNextWindowSize({ 164, -1, }, ImGuiCond_Always);
-	if (imgui.Begin('Calculator', calculator.is_open, bit.bor(ImGuiWindowFlags_AlwaysAutoResize, ImGuiWindowFlags_NoSavedSettings, ImGuiWindowFlags_NoFocusOnAppearing, ImGuiWindowFlags_NoNav))) then
+	if (imgui.Begin('Calculator', calculator.is_open, bit.bor(ImGuiWindowFlags_AlwaysAutoResize, ImGuiWindowFlags_NoFocusOnAppearing, ImGuiWindowFlags_NoNav))) then
 		
 		--Text Area--
 		imgui.SetCursorPos({15,35})
