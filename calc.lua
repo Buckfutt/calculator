@@ -1,6 +1,6 @@
 addon.name      = 'calc';
 addon.author    = 'K0D3R';
-addon.version   = '1.0';
+addon.version   = '1.1';
 addon.desc      = 'Displays an in-game calculator';
 
 require('common');
