@@ -5,11 +5,43 @@ addon.desc      = 'Displays an in-game calculator';
 
 require('common');
 local imgui = require('imgui');
+local chat = require('chat');
 
 local calculator = T{
-    is_open = { true, },
+	is_open = { true, },
 	display = { "" },
 };
+
+function calculate()
+	local func, err = load("return " .. calculator.display[1])
+	if func then
+		local success, result = pcall(func)
+		if success then
+			calculator.display[1] = tostring(result)
+		else
+			calculator.display[1] = "Error: " .. result
+		end
+	else
+		calculator.display[1] = "Error: " .. err
+	end
+end
+
+ashita.events.register('command', 'command_cb', function (e)
+    -- Parse the command arguments..
+    local args = e.command:args();
+    if (#args == 0 or not args[1]:any('/calc')) then
+        return;
+    end
+
+	if (#args >= 2 and args[2]:any('help') or #args == 1) then
+        print(chat.header(addon.name):append(chat.message('/calc <expression>')));
+        return;
+    end
+
+	calculator.display[1] = table.concat(args, "", 2);
+	calculate()
+	print(chat.header(addon.name):append(chat.message(calculator.display[1])))
+end);
 
 ashita.events.register('d3d_present', 'present_cb', function ()
     imgui.SetNextWindowBgAlpha(0.8);
@@ -112,17 +144,7 @@ ashita.events.register('d3d_present', 'present_cb', function ()
 		
 		imgui.SetCursorPos({85,208})
 		if imgui.Button("=", { 66, 30 }) then
-			local func, err = load("return " .. calculator.display[1])
-			if func then
-				local success, result = pcall(func)
-				if success then
-					calculator.display[1] = tostring(result)
-				else
-					calculator.display[1] = "Error: " .. result
-				end
-			else
-				calculator.display[1] = "Error: " .. err
-			end
+			calculate()
 		end
     end
     imgui.End();
